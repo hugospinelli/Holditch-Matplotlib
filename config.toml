@@ -1,0 +1,59 @@
+[main]
+#preset = 'dragon'  # Comment out or pick one from the presets.toml file
+a = 15  # Length of the first part of the chord
+b = 30  # Length of the second part of the chord
+control_points = []  # List of 2D control points, e.g. [[x1, y1], [x2, y2], [x3, y3]]
+
+[window]
+width = 720
+height = 540
+hide_toolbar = true
+
+[animation]
+fps = 30  # Frames/second
+speed = 100  # Maximum sliding speed in units/second
+steps_per_frame = 4  # Number of simulation steps per frame
+
+[display]
+background_color = 'black'
+data_scale = 1.0  # Multiplier for data point coordinates
+display_scale = 1.0  # Multiplier for display point coordinates
+
+[shortcuts]
+delete_selected_point = 'delete'  # del key
+pause = ' '  # space bar
+hide_control_points = 'h'
+save_info_to_log_file = 'l'  # lower-case L
+
+[bezier]
+circle_radius = 2.0  # Radius of the control points and chord points
+circle_linewidth = 1.0  # In display units
+circle_edgecolor = 'white'
+circle_facecolor = 'gray'
+selected_facecolor = 'dimgray'
+outline_width = 1.0  # In display units
+outline_color = 'gray'
+
+[curve]
+max_segment_legth = 1.0  # Maximum length of each line segment in the curve
+line_width = 2.0  # In display units
+line_color = 'white'
+
+[chord]
+[chord.edge_circles]
+radius = 2.0
+linewidth = 1.0  # In display units
+edgecolor = 'white'
+facecolor = 'brown'
+[chord.center_circle]
+radius = 2.0
+linewidth = 1.0  # In display units
+edgecolor = 'white'
+facecolor = 'mediumblue'
+[chord.line]
+width = 3.0  # In display units
+color = 'brown'
+
+[locus]
+line_color = 'royalblue'
+line_width = 2.0  # In display units
