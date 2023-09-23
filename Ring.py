@@ -19,6 +19,9 @@ class Ring(UserList):
     def insert(self, k: int, value: Any) -> None:
         self.data.insert(k % len(self.data), value)
 
+    def pop(self, k: int = -1) -> Any:
+        return self.data.pop(k % len(self.data))
+
     @staticmethod
     def _get_slice_range(s: slice, n: int) -> range:
         if (step := s.step) is None:

@@ -1,7 +1,6 @@
 import bisect
 import colorsys
 import logging
-import sys
 import time
 import tomllib
 
@@ -294,7 +293,7 @@ class Curve:
                 break
             for p in self.get_segment_intersections(cp_fixed.p, r, p1, p2):
                 d = self.get_d(p, k)
-                if self.get_dist(cp0.d, d) <= cutoff:
+                if abs(self.get_dist(d, cp0.d)) <= cutoff:
                     cps.append(CurvePoint(p, k, d))
                
         # Decreasing k (commented with asterisk where different from before)
@@ -306,7 +305,7 @@ class Curve:
                 break
             for p in self.get_segment_intersections(cp_fixed.p, r, p1, p2):
                 d = self.get_d(p, k)
-                if self.get_dist(d, cp0.d) <= cutoff:  # *
+                if abs(self.get_dist(d, cp0.d)) <= cutoff:
                     cps.append(CurvePoint(p, k, d))
 
         return cps
@@ -331,7 +330,7 @@ class Chord:
         b12 = other.cpb.p - self.cpb.p
         rot_12 = np.cross(da12*a12, db12*b12)
         rot_ab = np.cross(self.ab, other.ab)
-        if rot_12 == rot_ab == 0:
+        if abs(rot_12) < 1e-10 and abs(rot_ab) < 1e-10:
             return da12 > 0
         return rot_12*rot_ab > 0  # same sign
 
@@ -340,7 +339,7 @@ class Chord:
             # Slide `cpa` by exactly `sign*dist`
             cpa2 = self.curve.slide(self.cpa, sign*dist)
             for cpb2 in self.curve.get_curve_intersections(
-                self.a + self.b, cpa2, self.cpb, abs(dist)
+                self.a + self.b, cpa2, self.cpb, (1 + 1e-6)*abs(dist)
             ):
                 new_chord = Chord(self.curve, cpa2, cpb2, self.a, self.b)
                 if self.is_ahead(new_chord):
@@ -352,7 +351,7 @@ class Chord:
             # Slide `cpb` by exactly `sign*dist`
             cpb2 = self.curve.slide(self.cpb, sign*dist)
             for cpa2 in self.curve.get_curve_intersections(
-                self.a + self.b, cpb2, self.cpa, abs(dist)
+                self.a + self.b, cpb2, self.cpa, (1 + 1e-6)*abs(dist)
             ):
                 new_chord = Chord(self.curve, cpa2, cpb2, self.a, self.b)
                 if self.is_ahead(new_chord):
@@ -425,9 +424,9 @@ class Locus:
         dist_start = self.curve.get_dist(new_chord.cpa.d,
                                          self.start_chord.cpa.d)
         if (
-            abs(dist_start) <= dist
+            abs(dist_start) < (1 + 0.01)*dist  # plus small tolerance
             and self.chord.is_ahead(self.start_chord)
-            and self.start_chord.is_ahead(new_chord)
+            and not new_chord.is_ahead(self.start_chord)
         ):
             self.closed = True
             self.chord = new_chord

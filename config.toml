@@ -1,7 +1,7 @@
 [main]
 #preset = 'dragon'  # Comment out or pick one from the presets.toml file
-a = 15  # Length of the first part of the chord
-b = 30  # Length of the second part of the chord
+a = 37.5  # Length of the first part of the chord
+b = 75  # Length of the second part of the chord
 control_points = []  # List of 2D control points, e.g. [[x1, y1], [x2, y2], [x3, y3]]
 
 [window]
